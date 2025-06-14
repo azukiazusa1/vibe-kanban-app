@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+import { TaskCreationDialog } from "@/components/task-creation-dialog"
+import { getPriorityLabel, getPriorityColor } from "@/lib/priority"
 
 interface BoardPageProps {
   params: Promise<{
@@ -78,12 +80,12 @@ export default async function BoardPage({ params }: BoardPageProps) {
                       </p>
                     )}
                     <div className="flex items-center justify-between mt-2">
-                      <span className="text-xs px-2 py-1 rounded-full bg-muted">
-                        {task.priority}
+                      <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}>
+                        {getPriorityLabel(task.priority)}
                       </span>
                       {task.dueDate && (
                         <span className="text-xs text-muted-foreground">
-                          {new Date(task.dueDate).toLocaleDateString()}
+                          {new Date(task.dueDate).toLocaleDateString('ja-JP')}
                         </span>
                       )}
                     </div>
@@ -96,6 +98,8 @@ export default async function BoardPage({ params }: BoardPageProps) {
                   </div>
                 )}
               </div>
+              
+              <TaskCreationDialog columnId={column.id} />
             </div>
           ))}
         </div>
