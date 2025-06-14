@@ -4,6 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Task } from "@prisma/client";
 import { getPriorityLabel, getPriorityColor } from "@/lib/priority";
+import { isTaskOverdue, formatDueDate } from "@/lib/date-utils";
 
 interface DraggableTaskProps {
   task: Task;
@@ -30,6 +31,8 @@ export function DraggableTask({ task }: DraggableTaskProps) {
     transition,
   };
 
+  const isOverdue = task.dueDate && isTaskOverdue(new Date(task.dueDate));
+
   return (
     <div
       ref={setNodeRef}
@@ -37,12 +40,18 @@ export function DraggableTask({ task }: DraggableTaskProps) {
       {...attributes}
       {...listeners}
       className={`
-        bg-background rounded-md p-3 border shadow-sm cursor-grab
+        bg-background rounded-md p-3 shadow-sm cursor-grab
         ${isDragging ? "opacity-50 rotate-5 scale-105" : ""}
+        ${isOverdue ? 'border-2 border-red-500' : 'border'}
         hover:shadow-md transition-all duration-200
       `}
     >
-      <h4 className="font-medium">{task.title}</h4>
+      <div className="flex items-start justify-between">
+        <h4 className="font-medium">{task.title}</h4>
+        {isOverdue && (
+          <span className="text-red-500 text-sm">⚠️</span>
+        )}
+      </div>
       {task.description && (
         <p className="text-sm text-muted-foreground mt-1">
           {task.description}
@@ -53,8 +62,10 @@ export function DraggableTask({ task }: DraggableTaskProps) {
           {getPriorityLabel(task.priority)}
         </span>
         {task.dueDate && (
-          <span className="text-xs text-muted-foreground">
-            {new Date(task.dueDate).toLocaleDateString('ja-JP')}
+          <span className={`text-xs ${
+            isOverdue ? 'text-red-600 font-medium' : 'text-muted-foreground'
+          }`}>
+            {formatDueDate(new Date(task.dueDate))}
           </span>
         )}
       </div>

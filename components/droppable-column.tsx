@@ -5,6 +5,7 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { Column, Task } from "@prisma/client";
 import { DraggableTask } from "./draggable-task";
 import { TaskCreationDialog } from "./task-creation-dialog";
+import { isTaskOverdue } from "@/lib/date-utils";
 
 interface DroppableColumnProps {
   column: Column & {
@@ -38,6 +39,16 @@ export function DroppableColumn({ column }: DroppableColumnProps) {
         <span className="text-sm text-muted-foreground">
           {column.tasks.length}
         </span>
+        {(() => {
+          const overdueCount = column.tasks.filter(task => 
+            task.dueDate && isTaskOverdue(new Date(task.dueDate))
+          ).length;
+          return overdueCount > 0 && (
+            <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
+              期限切れ {overdueCount}
+            </span>
+          );
+        })()}
       </div>
       
       <div className="space-y-2">
