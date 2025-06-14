@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { TaskCreationDialog } from "@/components/task-creation-dialog"
 import { getPriorityLabel, getPriorityColor } from "@/lib/priority"
+import { isTaskOverdue, formatDueDate } from "@/lib/date-utils"
 
 interface BoardPageProps {
   params: Promise<{
@@ -65,32 +66,56 @@ export default async function BoardPage({ params }: BoardPageProps) {
                 <span className="text-sm text-muted-foreground">
                   {column.tasks.length}
                 </span>
+                {(() => {
+                  const overdueCount = column.tasks.filter(task => 
+                    task.dueDate && isTaskOverdue(new Date(task.dueDate))
+                  ).length;
+                  return overdueCount > 0 && (
+                    <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
+                      期限切れ {overdueCount}
+                    </span>
+                  );
+                })()}
               </div>
               
               <div className="space-y-2">
-                {column.tasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className="bg-background rounded-md p-3 border shadow-sm"
-                  >
-                    <h4 className="font-medium">{task.title}</h4>
-                    {task.description && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {task.description}
-                      </p>
-                    )}
-                    <div className="flex items-center justify-between mt-2">
-                      <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}>
-                        {getPriorityLabel(task.priority)}
-                      </span>
-                      {task.dueDate && (
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(task.dueDate).toLocaleDateString('ja-JP')}
-                        </span>
+                {column.tasks.map((task) => {
+                  const isOverdue = task.dueDate && isTaskOverdue(new Date(task.dueDate));
+                  return (
+                    <div
+                      key={task.id}
+                      className={`bg-background rounded-md p-3 shadow-sm ${
+                        isOverdue 
+                          ? 'border-2 border-red-500' 
+                          : 'border'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <h4 className="font-medium">{task.title}</h4>
+                        {isOverdue && (
+                          <span className="text-red-500 text-sm">⚠️</span>
+                        )}
+                      </div>
+                      {task.description && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {task.description}
+                        </p>
                       )}
+                      <div className="flex items-center justify-between mt-2">
+                        <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}>
+                          {getPriorityLabel(task.priority)}
+                        </span>
+                        {task.dueDate && (
+                          <span className={`text-xs ${
+                            isOverdue ? 'text-red-600 font-medium' : 'text-muted-foreground'
+                          }`}>
+                            {formatDueDate(new Date(task.dueDate))}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 
                 {column.tasks.length === 0 && (
                   <div className="text-center py-8 text-muted-foreground text-sm">
