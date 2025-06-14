@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { TaskCreationDialog } from "@/components/task-creation-dialog"
+import { ColumnCreationForm } from "@/components/column-creation-form"
 import { getPriorityLabel, getPriorityColor } from "@/lib/priority"
 
 interface BoardPageProps {
@@ -50,11 +51,11 @@ export default async function BoardPage({ params }: BoardPageProps) {
       </header>
       
       <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex gap-6 overflow-x-auto pb-4">
           {board.columns.map((column) => (
             <div
               key={column.id}
-              className="bg-muted/50 rounded-lg p-4 space-y-4"
+              className="flex-shrink-0 w-80 bg-muted/50 rounded-lg p-4 space-y-4"
             >
               <div className="flex items-center gap-2">
                 <div
@@ -102,6 +103,8 @@ export default async function BoardPage({ params }: BoardPageProps) {
               <TaskCreationDialog columnId={column.id} />
             </div>
           ))}
+          
+          <ColumnCreationForm boardId={board.id} />
         </div>
       </main>
     </div>

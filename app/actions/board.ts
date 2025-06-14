@@ -51,3 +51,27 @@ export async function createBoard(formData: FormData) {
 
   redirect(`/boards/${board.id}`);
 }
+
+export async function createColumn(boardId: string, title: string, color: string) {
+  if (!title?.trim()) {
+    throw new Error("Column title is required");
+  }
+
+  const lastColumn = await prisma.column.findFirst({
+    where: { boardId },
+    orderBy: { position: 'desc' },
+  });
+
+  const nextPosition = (lastColumn?.position ?? -1) + 1;
+
+  const column = await prisma.column.create({
+    data: {
+      title: title.trim(),
+      color,
+      position: nextPosition,
+      boardId,
+    },
+  });
+
+  return column;
+}
