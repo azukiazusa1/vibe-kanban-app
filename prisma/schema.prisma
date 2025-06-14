@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Board {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  columns Column[]
+
+  @@map("boards")
+}
+
+model Column {
+  id       String @id @default(cuid())
+  title    String
+  position Int
+  color    String @default("#94a3b8") // デフォルトは slate-400
+
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  tasks Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([boardId, position])
+  @@index([boardId])
+  @@map("columns")
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  position    Int
+  priority    Priority  @default(MEDIUM)
+  dueDate     DateTime?
+  isCompleted Boolean   @default(false)
+
+  columnId String
+  column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([columnId, position])
+  @@index([columnId])
+  @@map("tasks")
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
