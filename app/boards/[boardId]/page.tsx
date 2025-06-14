@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { DragDropBoard } from "@/components/drag-drop-board"
+import { ColumnCreationForm } from "@/components/column-creation-form"
 
 interface BoardPageProps {
   params: Promise<{
@@ -49,7 +50,10 @@ export default async function BoardPage({ params }: BoardPageProps) {
       </header>
       
       <main className="flex-1 container mx-auto px-4 py-8">
-        <DragDropBoard board={board} />
+        <div className="flex gap-6 overflow-x-auto pb-4">
+          <DragDropBoard board={board} />
+          <ColumnCreationForm boardId={board.id} />
+        </div>
       </main>
     </div>
   )
