@@ -221,9 +221,11 @@ export function DragDropBoard({ board: initialBoard }: DragDropBoardProps) {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="flex gap-6">
         {board.columns.map((column) => (
-          <DroppableColumn key={column.id} column={column} />
+          <div key={column.id} className="flex-shrink-0 w-80">
+            <DroppableColumn column={column} />
+          </div>
         ))}
       </div>
       
