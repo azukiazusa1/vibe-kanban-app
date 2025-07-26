@@ -1,35 +1,35 @@
-## Summary
+## 概要
 
-<!-- Brief description of the changes made -->
+<!-- 変更内容の簡潔な説明 -->
 
-## Changes
+## 変更内容
 
-<!-- List the specific changes made -->
+<!-- 実装した具体的な変更をリストアップ -->
 
 - [ ] 
 
-## Testing
+## テスト
 
-<!-- Describe how the changes were tested -->
+<!-- 変更内容をどのようにテストしたかを記述 -->
 
-- [ ] Tested locally
-- [ ] Unit tests added/updated
-- [ ] Integration tests pass
+- [ ] ローカル環境でテスト済み
+- [ ] ユニットテストを追加/更新
+- [ ] 結合テストが通過
 
-## Screenshots (if applicable)
+## スクリーンショット（該当する場合）
 
-<!-- Add screenshots or GIFs to show visual changes -->
+<!-- 視覚的な変更を示すスクリーンショットやGIFを追加 -->
 
-## Checklist
+## チェックリスト
 
-- [ ] Code follows the project's style guidelines
-- [ ] Self-review of code has been performed
-- [ ] Code is well-commented and documented
-- [ ] Changes generate no new warnings
-- [ ] Tests have been added that prove the fix is effective or that the feature works
-- [ ] New and existing unit tests pass locally
-- [ ] Any dependent changes have been merged and published
+- [ ] コードがプロジェクトのスタイルガイドラインに従っている
+- [ ] コードの自己レビューを実施済み
+- [ ] コードに適切なコメントとドキュメントが記載されている
+- [ ] 変更により新しい警告が発生していない
+- [ ] 修正が有効であることまたは機能が動作することを証明するテストを追加
+- [ ] 新規および既存のユニットテストがローカルで通過
+- [ ] 依存する変更がマージ・公開済み
 
-## Related Issues
+## 関連Issue
 
-<!-- Link to related issues using keywords like "Fixes #123" or "Closes #456" -->
+<!-- "Fixes #123" や "Closes #456" などのキーワードを使用してIssueにリンク -->
