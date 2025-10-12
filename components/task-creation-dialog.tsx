@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,7 +34,7 @@ import { createTask } from "@/app/actions/task";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-  
+
   return (
     <Button type="submit" disabled={pending}>
       {pending ? "作成中..." : "作成"}
@@ -56,7 +57,7 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
     if (date) {
       formData.append("dueDate", date.toISOString());
     }
-    
+
     await createTask(formData);
     setOpen(false);
     setDate(undefined);
@@ -66,7 +67,10 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground">
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
+        >
           <Plus className="h-4 w-4" />
           タスクを追加
         </Button>
@@ -74,6 +78,9 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>新規タスク作成</DialogTitle>
+          <DialogDescription>
+            新しいタスクの詳細を入力してください。
+          </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -85,7 +92,7 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
               required
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="description">説明</Label>
             <Textarea
@@ -95,7 +102,7 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
               rows={3}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="priority">優先度</Label>
             <Select value={priority} onValueChange={setPriority}>
@@ -110,7 +117,7 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="space-y-2">
             <Label>期限</Label>
             <Popover>
@@ -120,7 +127,9 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
                   className="w-full justify-start text-left font-normal"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "yyyy年MM月dd日", { locale: ja }) : "期限を選択（任意）"}
+                  {date
+                    ? format(date, "yyyy年MM月dd日", { locale: ja })
+                    : "期限を選択（任意）"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
@@ -133,7 +142,7 @@ export function TaskCreationDialog({ columnId }: TaskCreationDialogProps) {
               </PopoverContent>
             </Popover>
           </div>
-          
+
           <div className="flex justify-end gap-2 pt-4">
             <Button
               type="button"
