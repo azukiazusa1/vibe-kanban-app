@@ -42,29 +42,33 @@ export function DraggableTask({ task }: DraggableTaskProps) {
       className={`
         bg-background rounded-md p-3 shadow-sm cursor-grab
         ${isDragging ? "opacity-50 rotate-5 scale-105" : ""}
-        ${isOverdue ? 'border-2 border-red-500' : 'border'}
+        ${isOverdue ? "border-2 border-red-500 dark:border-red-400" : "border"}
         hover:shadow-md transition-all duration-200
       `}
     >
       <div className="flex items-start justify-between">
         <h4 className="font-medium">{task.title}</h4>
         {isOverdue && (
-          <span className="text-red-500 text-sm">⚠️</span>
+          <span className="text-red-500 dark:text-red-400 text-sm">⚠️</span>
         )}
       </div>
       {task.description && (
-        <p className="text-sm text-muted-foreground mt-1">
-          {task.description}
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
       )}
       <div className="flex items-center justify-between mt-2">
-        <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}>
+        <span
+          className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}
+        >
           {getPriorityLabel(task.priority)}
         </span>
         {task.dueDate && (
-          <span className={`text-xs ${
-            isOverdue ? 'text-red-600 font-medium' : 'text-muted-foreground'
-          }`}>
+          <span
+            className={`text-xs ${
+              isOverdue
+                ? "text-red-600 dark:text-red-400 font-medium"
+                : "text-muted-foreground"
+            }`}
+          >
             {formatDueDate(new Date(task.dueDate))}
           </span>
         )}

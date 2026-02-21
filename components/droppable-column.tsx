@@ -1,7 +1,10 @@
 "use client";
 
 import { useDroppable } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { Column, Task } from "@prisma/client";
 import { DraggableTask } from "./draggable-task";
 import { TaskCreationDialog } from "./task-creation-dialog";
@@ -40,34 +43,36 @@ export function DroppableColumn({ column }: DroppableColumnProps) {
           {column.tasks.length}
         </span>
         {(() => {
-          const overdueCount = column.tasks.filter(task => 
-            task.dueDate && isTaskOverdue(new Date(task.dueDate))
+          const overdueCount = column.tasks.filter(
+            (task) => task.dueDate && isTaskOverdue(new Date(task.dueDate)),
           ).length;
-          return overdueCount > 0 && (
-            <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
-              期限切れ {overdueCount}
-            </span>
+          return (
+            overdueCount > 0 && (
+              <span className="text-xs bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 px-2 py-1 rounded-full">
+                期限切れ {overdueCount}
+              </span>
+            )
           );
         })()}
       </div>
-      
+
       <div className="space-y-2">
         <SortableContext
-          items={column.tasks.map(task => task.id)}
+          items={column.tasks.map((task) => task.id)}
           strategy={verticalListSortingStrategy}
         >
           {column.tasks.map((task) => (
             <DraggableTask key={task.id} task={task} />
           ))}
         </SortableContext>
-        
+
         {column.tasks.length === 0 && (
           <div className="text-center py-8 text-muted-foreground text-sm">
             タスクがありません
           </div>
         )}
       </div>
-      
+
       <TaskCreationDialog columnId={column.id} />
     </div>
   );
